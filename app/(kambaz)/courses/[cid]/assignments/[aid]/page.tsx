@@ -98,6 +98,86 @@ export default function AssignmentEditor() {
               <label htmlFor="wd-file-upload">File Uploads</label>
             </td>
           </tr>
+          <tr>
+            <td align="right" valign="top">
+              Assign
+            </td>
+            <td>
+              <label htmlFor="wd-assign-to">
+                <b>Assign to</b>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"></td>
+            <td>
+              <select multiple id="wd-assign-to">
+                <option value="EVERYONE">Everyone</option>
+                <option value="PERSON1">Person 1</option>
+                <option value="PERSON2">Person 2</option>
+                <option value="PERSON3">Person 3</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"></td>
+            <td>
+              <label htmlFor="wd-due-date">
+                <b>Due</b>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"></td>
+            <td>
+              <input
+                type="datetime-local"
+                id="wd-due-date"
+                defaultValue="2026-09-21T20:00"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td align="right"></td>
+            <td align="left" valign="top">
+              <label htmlFor="wd-available-from">
+                <b>Available from</b>
+              </label>
+            </td>
+            <td align="left" valign="top">
+              <label htmlFor="wd-available-until">
+                <b>Until</b>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"></td>
+            <td align="left" valign="top">
+              <input
+                type="datetime-local"
+                id="wd-availble-from"
+                defaultValue="2026-09-20T20:00"
+              />
+            </td>
+            <td align="left" valign="top">
+              <input
+                type="datetime-local"
+                id="wd-availble-until"
+                defaultValue="2026-09-25T21:00"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td align="right"></td>
+            <td align="right"></td>
+            <td align="right" valign="top">
+              <hr />
+              <button id="wd-cancel">Cancel</button>&nbsp;
+              <button type="submit" id="wd-save">
+                Save
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
