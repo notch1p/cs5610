@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const TOC = () => (
   <ul>
-    Zhenming
+    Zhenming Gao
     <br /> presenting:
     <li>
       <Link href="/labs" id="wd-lab1-link">
