@@ -1,3 +1,7 @@
-const Placeholder2 = () => <h1>Lab2 (WIP)</h1>;
-
-export default Placeholder2;
+export default function Lab2() {
+  return (
+    <div id="wd-lab2">
+      <h2>Lab 2 - Cascading Style Sheets</h2>
+    </div>
+  );
+}
