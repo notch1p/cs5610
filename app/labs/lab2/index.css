@@ -1,0 +1,240 @@
+/* p {
+  background-color: green;
+  color: white;
+} */
+
+p#wd-id-selector-1 {
+  background-color: red;
+  color: white;
+}
+p#wd-id-selector-2 {
+  background-color: yellow;
+  color: black;
+}
+
+h3 {
+  background-color: pink;
+  color: navy;
+}
+
+h2 {
+  background-color: navy;
+  color: white;
+}
+
+p#wd-id-selector-3 {
+  background-color: bisque;
+  color: magenta;
+}
+
+p#wd-ai-id-selector {
+  background-color: cyan;
+  color: teal;
+}
+
+.wd-class-selector {
+  background-color: yellow;
+  color: blue;
+}
+
+.wd-your-class {
+  background-color: green;
+  color: white;
+}
+
+.wd-ai-class-selector {
+  background-color: whitesmoke;
+  color: darkslategray;
+}
+
+.wd-selector-1 .wd-selector-3 {
+  background-color: red;
+  color: white;
+}
+.wd-selector-2 > .wd-selector-3 > .wd-selector-4 {
+  background-color: yellow;
+  color: blue;
+}
+.wd-selector-2 > .wd-selector-3 > .wd-selector-5 {
+  background-color: violet;
+  color: darkcyan;
+}
+
+.wd-selector-1 .wd-ai-selector-5 {
+  background-color: black;
+  color: white;
+}
+
+/* the more specific rule wins. that is, p#wd-ai-cascade */
+p#wd-ai-cascade {
+  background-color: green;
+}
+p.wd-ai-cascade {
+  background-color: yellow;
+}
+.wd-ai-cascade {
+  background-color: red;
+}
+
+.wd-fg-color-black {
+  color: black;
+}
+.wd-fg-color-white {
+  color: white;
+}
+.wd-fg-color-blue {
+  color: #7070ff;
+}
+.wd-fg-color-red {
+  color: #ff7070;
+}
+.wd-fg-color-green {
+  color: green;
+}
+.wd-bg-color-yellow {
+  background-color: #ffff07;
+}
+.wd-bg-color-blue {
+  background-color: #7070ff;
+}
+.wd-bg-color-red {
+  background-color: #ff7070;
+}
+.wd-bg-color-green {
+  background-color: green;
+}
+.wd-bg-color-gray {
+  background-color: lightgray;
+}
+.wd-border-fat {
+  border-width: 20px 30px 20px 30px;
+}
+.wd-border-thin {
+  border-width: 4px;
+}
+.wd-border-solid {
+  border-style: solid;
+}
+.wd-border-dashed {
+  border-style: dashed;
+}
+.wd-border-yellow {
+  border-color: #ffff07;
+}
+.wd-border-red {
+  border-color: #ff7070;
+}
+.wd-border-blue {
+  border-color: #7070ff;
+}
+
+.wd-padded-top-left {
+  padding-top: 50px;
+  padding-left: 50px;
+}
+
+.wd-padded-top-left-big {
+  padding-top: 50px;
+  padding-left: 300px;
+}
+.wd-padded-bottom-right {
+  padding-bottom: 50px;
+  padding-right: 50px;
+}
+.wd-padding-fat {
+  padding: 50px;
+}
+
+.wd-padded-top-only {
+  padding-top: 200px;
+}
+.wd-margin-bottom {
+  margin-bottom: 50px;
+}
+.wd-margin-right-left {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+.wd-margin-all-around {
+  margin: 30px;
+}
+.wd-box-model-parent {
+  display: flow-root;
+  background-color: lightgray;
+  padding-top: 8px;
+}
+.wd-box-model-margin-label,
+.wd-box-model-border-label,
+.wd-box-model-padding-label {
+  font-size: 12px;
+  line-height: 12px;
+}
+.wd-box-model-box {
+  position: relative;
+  margin: 20px;
+  padding: 20px;
+  border: 10px solid #c41e3a;
+  background-color: #cfe2ff;
+}
+.wd-box-model-border-label {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  color: #c41e3a;
+}
+.wd-box-model-margin-label {
+  position: absolute;
+  bottom: -26px;
+  left: -20px;
+}
+.wd-box-model-padding-label {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+}
+.wd-box-model-content {
+  background-color: #d1e7dd;
+  padding: 8px;
+}
+.wd-box-sizing-demo {
+  background-color: lightgray;
+  padding: 10px;
+}
+.wd-box-sizing-content,
+.wd-box-sizing-border {
+  width: 200px;
+  height: 180px;
+  padding: 20px;
+  border: 10px solid #c41e3a;
+  background-color: #ffff07;
+  margin-bottom: 10px;
+}
+.wd-box-sizing-content {
+  box-sizing: content-box;
+}
+.wd-box-sizing-border-2 {
+  box-sizing: border-box;
+}
+.wd-box-sizing-border-2 {
+  width: 500px;
+  height: 250px;
+  padding: 30px;
+  border: 10px solid magenta;
+  background-color: grey;
+  margin-bottom: 10px;
+  color: white;
+}
+.wd-rounded-corners-top {
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+}
+.wd-rounded-corners-bottom {
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+}
+.wd-rounded-corners-all-around {
+  border-radius: 50px;
+}
+.wd-rounded-corners-inline {
+  border-radius: 30px 0px 20px 50px;
+}
