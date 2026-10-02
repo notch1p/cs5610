@@ -14,6 +14,15 @@ export default function Corners() {
       <p className="wd-rounded-corners-inline wd-border-thin wd-border-blue wd-border-solid wd-padding-fat">
         Different rounded corners
       </p>
+      <p className="wd-rounded-corners-inline-2 wd-border-thin wd-border-blue wd-border-solid wd-padding-fat">
+        + Another Different rounded corners
+      </p>
+      <p
+        className="wd-ai-rounded-left wd-border-thin wd-border-blue wd-border-solid wd-padding-fat"
+        id="wd-ai-corners"
+      >
+        wd-ai-corners
+      </p>
     </div>
   );
 }
