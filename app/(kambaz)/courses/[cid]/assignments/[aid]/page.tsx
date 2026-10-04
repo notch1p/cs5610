@@ -155,14 +155,14 @@ export default function AssignmentEditor() {
             <td align="left" valign="top">
               <input
                 type="datetime-local"
-                id="wd-availble-from"
+                id="wd-available-from"
                 defaultValue="2026-09-20T20:00"
               />
             </td>
             <td align="left" valign="top">
               <input
                 type="datetime-local"
-                id="wd-availble-until"
+                id="wd-available-until"
                 defaultValue="2026-09-25T21:00"
               />
             </td>
