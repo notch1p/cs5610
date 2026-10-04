@@ -12,7 +12,12 @@ const TOC = () => (
     <li>
       <Link href="/labs/lab1">Lab1</Link>
     </li>
-    <li>Lab2</li>
+    <li>
+      <Link href="/labs/lab2">Lab2</Link>
+    </li>
+    <li>
+      <Link href="/labs/lab2/tailwind">Tailwind</Link>
+    </li>
     <li>Lab3</li>
     <li>
       <a href="https://webdev-client.vercel.app/book/ch1" id="wd-toc-book-link">

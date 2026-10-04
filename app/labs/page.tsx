@@ -12,6 +12,9 @@ export default function Home() {
           <Link href="/labs/lab2">Lab2</Link>
         </li>
         <li>
+          <Link href="/labs/lab2/tailwind">Lab2 - Tailwind</Link>
+        </li>
+        <li>
           <Link href="/labs/lab3">Lab3</Link>
         </li>
         <li>
