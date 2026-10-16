@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > Vercel always deploys `master`,
 > which is always reset to the _newest, finalized_ lab (or the final project).
-> **As of now, that is `lab1`.**
+> **As of now, that is `lab2`.**
 > The site is reachable at either
 >
 > - https://cs5610.notch1p.xyz
@@ -11,5 +11,6 @@
 
 - Lab1: [`a1`](https://github.com/notch1p/cs5610/tree/a1)
 - Lab2: [`a2`](https://github.com/notch1p/cs5610/tree/a2)
+- Lab3: [`a3`](https://github.com/notch1p/cs5610/tree/a3)
 
 Bun is used instead of Node but there shouldn't be any visible behavorial difference.
