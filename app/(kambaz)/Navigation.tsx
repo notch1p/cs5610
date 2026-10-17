@@ -3,92 +3,85 @@
 import {
   AiOutlineBook,
   AiOutlineCalendar,
+  AiOutlineClockCircle,
   AiOutlineDashboard,
   AiOutlineExperiment,
   AiOutlineInbox,
-  AiOutlineQuestionCircle,
 } from "react-icons/ai";
 import { FaRegCircleUser } from "react-icons/fa6";
 import Link from "next/link";
-import "@/app/labs/lab2/tailwind/utilities.css";
+import { usePathname } from "next/navigation";
+
+const LINKS = [
+  { label: "Dashboard", path: "/dashboard", icon: AiOutlineDashboard },
+  { label: "Courses", path: "/dashboard", icon: AiOutlineBook },
+  { label: "Calendar", path: "/calendar", icon: AiOutlineCalendar },
+  { label: "Inbox", path: "/inbox", icon: AiOutlineInbox },
+  { label: "Labs", path: "/labs", icon: AiOutlineExperiment },
+  { label: "History", path: "/history", icon: AiOutlineClockCircle },
+] as const;
 
 export default function KambazNavigation() {
+  const pathname = usePathname() ?? "";
+  const accountActive = pathname.includes("/account");
+
   return (
     <nav
       id="wd-kambaz-navigation"
       className="fixed bottom-0 top-0 z-20 hidden w-[120px] bg-black md:block"
     >
-      <Link
-        href="https://www.northeastern.edu"
+      <a
+        href="https://www.northeastern.edu/"
         id="wd-neu-link"
-        className="block bg-black text-center text-sm text-white no-underline"
         target="_blank"
+        rel="noreferrer"
+        className="block bg-black py-3 text-center"
       >
-        <img src="/images/neu.png" className="w-[120px] object-scale-down" />
-      </Link>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/neu.png"
+          width={100}
+          height={100}
+          alt="Northeastern University"
+          className="mx-auto"
+        />
+      </a>
       <Link
         href="/account"
         id="wd-account-link"
-        className="block bg-black py-3 text-center text-sm text-white no-underline"
+        className={`block py-3 text-center text-sm no-underline ${
+          accountActive ? "bg-white text-red-600" : "bg-black text-white"
+        }`}
       >
-        <FaRegCircleUser className="inline-block text-3xl text-white" />
+        <FaRegCircleUser
+          className={`inline-block text-3xl ${
+            accountActive ? "text-red-600" : "text-white"
+          }`}
+        />
         <br />
         Account
       </Link>
-      <Link
-        href="/dashboard"
-        id="wd-dashboard-link"
-        className="block bg-white py-3 text-center text-sm text-red-600 no-underline"
-      >
-        <AiOutlineDashboard className="inline-block text-3xl text-red-600" />
-        <br />
-        Dashboard
-      </Link>
-      <Link
-        href="/dashboard"
-        id="wd-course-link"
-        className="block bg-black py-3 text-center text-sm text-white no-underline"
-      >
-        <AiOutlineBook className="inline-block text-3xl text-red-600" />
-        <br />
-        Courses
-      </Link>
-      <Link
-        href="/calendar"
-        id="wd-calendar-link"
-        className="block bg-black py-3 text-center text-sm text-white no-underline"
-      >
-        <AiOutlineCalendar className="inline-block text-3xl text-red-600" />
-        <br />
-        Calendar
-      </Link>
-      <Link
-        href="/inbox"
-        id="wd-inbox-link"
-        className="block bg-black py-3 text-center text-sm text-white no-underline"
-      >
-        <AiOutlineInbox className="inline-block text-3xl text-red-600" />
-        <br />
-        Inbox
-      </Link>
-      <Link
-        href="/labs"
-        id="wd-labs-link"
-        className="block bg-black py-3 text-center text-sm text-white no-underline"
-      >
-        <AiOutlineExperiment className="inline-block text-3xl text-red-600" />
-        <br />
-        Labs
-      </Link>
-      <Link
-        href="/labs"
-        id="wd-ai-nav-help"
-        className="block bg-black py-3 text-center text-sm text-white no-underline"
-      >
-        <AiOutlineQuestionCircle className="inline-block text-3xl text-red-600" />
-        <br />
-        Labs (AI)
-      </Link>
+      {LINKS.map((link) => {
+        const active =
+          link.label === "Courses"
+            ? pathname.includes("/courses")
+            : pathname.includes(link.path);
+        const Icon = link.icon;
+        return (
+          <Link
+            key={link.label}
+            href={link.path}
+            id={`wd-${link.label.toLowerCase()}-link`}
+            className={`block py-3 text-center text-sm no-underline ${
+              active ? "bg-white text-red-600" : "bg-black text-white"
+            }`}
+          >
+            <Icon className="inline-block text-3xl text-red-500" />
+            <br />
+            {link.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }

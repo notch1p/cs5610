@@ -14,8 +14,16 @@ textarea[id="wd-description"]
   ---------------------------------------------------------- (divider)
                                 button[Cancel] button[Save] (submit type)
 */
+import Link from "next/link";
+import * as db from "../../../../database";
 
-export default function AssignmentEditor() {
+export default async function AssignmentEditor({
+  params,
+}: {
+  params: Promise<{ cid: string; aid: string }>;
+}) {
+  const { cid, aid } = await params;
+  const assignment = db.assignments.find(({ _id }) => _id === aid);
   return (
     <div id="wd-assignments-editor" className="space-y-6">
       <div>
@@ -25,14 +33,24 @@ export default function AssignmentEditor() {
         <input
           type="text"
           id="wd-name"
-          defaultValue="A1 - ENV + HTML"
+          defaultValue={assignment?.title ?? ""}
           className="block w-full rounded border-neutral-300 shadow-sm px-3 py-1.5"
+        />
+        <label htmlFor="wd-assignment-id" className="mb-1 block">
+          Assignment id (readonly)
+        </label>
+        <input
+          type="text"
+          id="wd-assignment-id"
+          defaultValue={aid}
+          className="block w-full rounded border-neutral-300 shadow-sm px-3 py-1.5 read-only:bg-gray-200"
+          readOnly
         />
       </div>
       <textarea
         id="wd-description"
         rows={5}
-        defaultValue="The assignment is available online"
+        defaultValue={assignment?.description ?? ""}
         className="block w-full rounded border-neutral-300 shadow-sm px-3 py-1.5"
       />
 
@@ -43,7 +61,7 @@ export default function AssignmentEditor() {
         <input
           type="text"
           id="wd-points"
-          defaultValue={100}
+          defaultValue={assignment?.points ?? 100}
           className="block w-full rounded border-neutral-300 shadow-sm px-3 py-1.5"
         />
 
@@ -181,7 +199,7 @@ export default function AssignmentEditor() {
               <input
                 type="datetime-local"
                 id="wd-available-from"
-                defaultValue="2026-09-20T20:00"
+                defaultValue={assignment?.available}
                 className="block w-full rounded border-neutral-300  shadow-sm px-3 py-1.5"
               />
             </div>
@@ -195,7 +213,7 @@ export default function AssignmentEditor() {
               <input
                 type="datetime-local"
                 id="wd-available-until"
-                defaultValue="2026-09-25T21:00"
+                defaultValue={assignment?.due}
                 className="block w-full rounded border-neutral-300  shadow-sm px-3 py-1.5"
               />
             </div>
@@ -214,19 +232,20 @@ export default function AssignmentEditor() {
       />
       <hr className="border-neutral-300" />
       <div className="flex justify-end gap-2">
-        <button
+        <Link
+          href={`/courses/${cid}/assignments`}
           id="wd-cancel"
-          className="rounded border border-neutral-300 bg-white shadow-sm px-3 py-1.5 text-sm"
+          className="rounded border border-neutral-300 bg-white shadow-sm px-3 py-1.5 text-sm no-underline"
         >
           Cancel
-        </button>
-        <button
-          type="submit"
+        </Link>
+        <Link
           id="wd-save"
-          className="rounded border border-red-600 bg-red-600 shadow-sm px-3 py-1.5 text-sm font-medium text-white"
+          className="rounded border border-red-600 bg-red-600 shadow-sm px-3 py-1.5 text-sm font-medium text-white no-underline"
+          href={`/courses/${cid}/assignments`}
         >
           Save
-        </button>
+        </Link>
       </div>
     </div>
   );
