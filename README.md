@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > Vercel always deploys `master`,
 > which is always reset to the _newest, finalized_ lab (or the final project).
-> **As of now, that is `lab2`.**
+> **As of now, that is `lab3`.**
 > The site is reachable at either
 >
 > - https://cs5610.notch1p.xyz
