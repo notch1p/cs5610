@@ -53,7 +53,7 @@ export default function CourseNavigation({ cid }: { cid: string }) {
             className={
               active
                 ? "list-group-item active border-0"
-                : "list-group-item border-0 text-red-600"
+                : "list-group-item border-0 text-red-700"
             }
           >
             {label}

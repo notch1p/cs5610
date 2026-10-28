@@ -12,5 +12,6 @@
 - Lab1: [`a1`](https://github.com/notch1p/cs5610/tree/a1)
 - Lab2: [`a2`](https://github.com/notch1p/cs5610/tree/a2)
 - Lab3: [`a3`](https://github.com/notch1p/cs5610/tree/a3)
+- Lab4: [`a4`](https://github.com/notch1p/cs5610/tree/a4)
 
 Bun is used instead of Node but there shouldn't be any visible behavorial difference.

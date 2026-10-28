@@ -1,30 +1,54 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useState } from "react";
+import { redirect, useParams } from "next/navigation";
 import CourseNavigation from "./Navigation";
 import Breadcrumb from "./Breadcrumb";
-import { courses } from "../../database";
+import { useCoursesStore } from "../../store/coursesStore";
+import { useEnrollmentsStore } from "../../store/enrollmentsStore";
+import { useAccountContext } from "../../account/AccountContext";
 import { AiOutlineMenu } from "react-icons/ai";
 
-export default async function CoursesLayout({
+export default function CoursesLayout({
   children,
-  params,
 }: Readonly<{
   children: ReactNode;
-  params: Promise<{ cid: string }>;
 }>) {
-  const { cid } = await params;
-  const course = courses.find((c) => c._id === cid);
+  const { cid } = useParams();
+  const courseId = typeof cid === "string" ? cid : "";
+  const courses = useCoursesStore((state) => state.courses);
+  const course = courses.find((c) => c._id === courseId);
+  const { currentUser } = useAccountContext();
+  const enrollments = useEnrollmentsStore((state) => state.enrollments);
+  const [showCourseNav, setShowCourseNav] = useState(true);
+
+  if (
+    currentUser &&
+    !enrollments.some(
+      (enrollment) =>
+        enrollment.user === currentUser._id && enrollment.course === courseId,
+    )
+  ) {
+    redirect("/dashboard");
+  }
+
   return (
     <div id="wd-courses">
-      <h2 className="text-2xl font-semibold text-red-600">
-        <AiOutlineMenu className="me-4 -mb-1 inline text-xxl" />
+      <h2 className="text-2xl font-semibold text-red-700">
+        <AiOutlineMenu
+          className="me-4 -mb-1 inline cursor-pointer text-xxl"
+          onClick={() => setShowCourseNav(!showCourseNav)}
+          title="Toggle course navigation"
+        />
         <Breadcrumb course={course} />
-        &nbsp;<span>({course?._id})</span>
       </h2>
       <hr className="my-3" />
       <div className="flex gap-4">
-        <div className="hidden w-[150px] shrink-0 md:block">
-          <CourseNavigation cid={cid} />
-        </div>
+        {showCourseNav ? (
+          <div className="hidden w-[160px] shrink-0 md:block">
+            <CourseNavigation cid={courseId} />
+          </div>
+        ) : null}
         <div className="min-w-0 flex-1">{children}</div>
       </div>
     </div>

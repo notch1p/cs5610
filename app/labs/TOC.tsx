@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import "./layout.css";
 type LinkT = Readonly<{
   href: string;
   id: string;
@@ -40,6 +40,12 @@ const LINKS: LinkT[] = [
     id: "wd-lab3-link",
     label: "Lab 3",
     match: (p: string) => p.includes("/lab3"),
+  },
+  {
+    href: "/labs/lab4",
+    id: "wd-lab4-link",
+    label: "Lab 4",
+    match: (p: string) => p.includes("/lab4"),
   },
 
   { href: "/", id: "wd-kambaz-link", label: "Kambaz", match: () => false },

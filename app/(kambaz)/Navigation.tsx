@@ -50,12 +50,12 @@ export default function KambazNavigation() {
         href="/account"
         id="wd-account-link"
         className={`block py-3 text-center text-sm no-underline ${
-          accountActive ? "bg-white text-red-600" : "bg-black text-white"
+          accountActive ? "bg-white text-red-700" : "bg-black text-white"
         }`}
       >
         <FaRegCircleUser
           className={`inline-block text-3xl ${
-            accountActive ? "text-red-600" : "text-white"
+            accountActive ? "text-red-700" : "text-white"
           }`}
         />
         <br />
@@ -73,7 +73,7 @@ export default function KambazNavigation() {
             href={link.path}
             id={`wd-${link.label.toLowerCase()}-link`}
             className={`block py-3 text-center text-sm no-underline ${
-              active ? "bg-white text-red-600" : "bg-black text-white"
+              active ? "bg-white text-red-700" : "bg-black text-white"
             }`}
           >
             <Icon className="inline-block text-3xl text-red-500" />
