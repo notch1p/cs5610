@@ -23,7 +23,9 @@ export default function Home() {
           </Link>
         </li>
         <li>
-          <Link href="/labs/lab5">Lab5</Link>
+          <Link href="/labs/lab5" id="wd-lab5-link">
+            Lab5
+          </Link>
         </li>
         <li>
           <Link href="https://github.com/notch1p/cs5610" id="wd-github">
