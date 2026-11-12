@@ -1,17 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useParams } from "next/navigation";
-import * as db from "../../../../database";
-import { useEnrollmentsStore } from "@/app/(kambaz)/store/enrollmentsStore";
+import type { User } from "@/app/(kambaz)/account/AccountContext";
+import * as client from "../client";
 
 export default function PeopleTable() {
   const { cid } = useParams();
-  const { users } = db;
-  const { enrollments } = useEnrollmentsStore();
-  const enrolled = users.filter(({ _id }) =>
-    enrollments.some(({ user, course }) => user === _id && course === cid),
-  );
+  // The server leaves out passwords.
+  const [enrolled, setEnrolled] = useState<Omit<User, "password">[]>([]);
+  useEffect(() => {
+    client.findUsersForCourse(cid as string).then(setEnrolled);
+  }, [cid]);
   return (
     <div id="wd-people-table" className="overflow-x-auto">
       <table className="w-full border-collapse text-left text-sm">

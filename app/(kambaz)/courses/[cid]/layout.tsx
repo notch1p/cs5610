@@ -1,12 +1,12 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { redirect, useParams } from "next/navigation";
 import CourseNavigation from "./Navigation";
 import Breadcrumb from "./Breadcrumb";
-import { useCoursesStore } from "../../store/coursesStore";
-import { useEnrollmentsStore } from "../../store/enrollmentsStore";
+import type { Course } from "../../store/coursesStore";
 import { useAccountContext } from "../../account/AccountContext";
+import * as client from "../client";
 import { AiOutlineMenu } from "react-icons/ai";
 
 export default function CoursesLayout({
@@ -16,19 +16,21 @@ export default function CoursesLayout({
 }>) {
   const { cid } = useParams();
   const courseId = typeof cid === "string" ? cid : "";
-  const courses = useCoursesStore((state) => state.courses);
-  const course = courses.find((c) => c._id === courseId);
   const { currentUser } = useAccountContext();
-  const enrollments = useEnrollmentsStore((state) => state.enrollments);
+  // Signed in: only your enrolled courses can be opened. Signed out: any.
+  const [courses, setCourses] = useState<Course[] | null>(null);
   const [showCourseNav, setShowCourseNav] = useState(true);
+  useEffect(() => {
+    const load = currentUser ? client.findMyCourses : client.fetchAllCourses;
+    // On failure (e.g. a 401 after a server restart) don't stay blank forever.
+    load()
+      .then(setCourses)
+      .catch(() => setCourses([]));
+  }, [currentUser]);
 
-  if (
-    currentUser &&
-    !enrollments.some(
-      (enrollment) =>
-        enrollment.user === currentUser._id && enrollment.course === courseId,
-    )
-  ) {
+  if (!courses) return null; // still loading
+  const course = courses.find((c) => c._id === courseId);
+  if (currentUser && !course) {
     redirect("/dashboard");
   }
 

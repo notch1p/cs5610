@@ -3,30 +3,50 @@
 import Module from "./Module";
 import Lesson from "./Lesson";
 import ModulesControls from "./ModulesControls";
-import { useModulesStore } from "@/app/(kambaz)/store/modulesStore";
-import { useState } from "react";
+import type { CourseModule } from "@/app/(kambaz)/store/modulesStore";
+import * as client from "./client";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 export default function Modules() {
   const { cid } = useParams();
-  const {
-    modules: allM,
-    updateModule,
-    addModule,
-    editModule,
-    deleteModule,
-  } = useModulesStore();
-  const modules = allM.filter((m) => m.course === cid);
+  const courseId = cid as string;
+  const [modules, setModules] = useState<CourseModule[]>([]);
   const [moduleName, setModuleName] = useState("");
+  useEffect(() => {
+    client.findModulesForCourse(courseId).then(setModules);
+  }, [courseId]);
+  // Typing and the pencil's `editing` flag stay local; Enter saves to the server.
+  const updateModule = (module: CourseModule) =>
+    setModules((ms) => ms.map((m) => (m._id === module._id ? module : m)));
+  const editModule = (moduleId: string) =>
+    setModules((ms) =>
+      ms.map((m) => (m._id === moduleId ? { ...m, editing: true } : m)),
+    );
+  const saveModule = async (module: CourseModule) => {
+    await client.updateModule(module);
+    updateModule(module);
+  };
+  const addModule = async () => {
+    if (moduleName === "") return;
+    const newModule = await client.createModuleForCourse(courseId, {
+      name: moduleName,
+      description: "",
+      lessons: [],
+    });
+    setModules((ms) => [...ms, newModule]);
+    setModuleName("");
+  };
+  const deleteModule = async (moduleId: string) => {
+    await client.deleteModule(moduleId);
+    setModules((ms) => ms.filter((m) => m._id !== moduleId));
+  };
   return (
     <div>
       <ModulesControls
         moduleName={moduleName}
         setModuleNameAction={setModuleName}
-        addModuleAction={() => {
-          if (moduleName === "")
-            addModule({ name: moduleName, course: cid as string });
-        }}
+        addModuleAction={addModule}
       />
       <ul id="wd-modules" className="m-0 list-none p-0">
         {modules.map((module) => (
@@ -45,7 +65,7 @@ export default function Modules() {
                   }
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      updateModule({ ...module, editing: false });
+                      saveModule({ ...module, editing: false });
                     }
                   }}
                 />

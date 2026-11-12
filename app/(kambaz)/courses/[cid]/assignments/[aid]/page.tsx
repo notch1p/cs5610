@@ -15,25 +15,38 @@ textarea[id="wd-description"]
   ---------------------------------------------------------- (divider)
                                 button[Cancel] button[Save] (submit type)
 */
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import AssignmentEditorScreen from "../AssignmentEditorScreen";
 import {
   templateAssignment,
-  useAssignmentsStore,
+  type Assignment,
 } from "@/app/(kambaz)/store/assignmentsStore";
+import * as client from "../client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const { assignments, updateAssignment } = useAssignmentsStore();
+  const courseId = cid as string;
+  const assignmentId = aid as string;
+  // undefined while loading; null when `aid` is a new assignment.
+  const [existing, setExisting] = useState<Assignment | null>();
+  useEffect(() => {
+    client.findAssignmentsForCourse(courseId).then((list: Assignment[]) => {
+      setExisting(list.find((a) => a._id === assignmentId) ?? null);
+    });
+  }, [courseId, assignmentId]);
+  // The editor copies `a` into state once, so wait until we know what to show.
+  if (existing === undefined) return null;
+  const save = (assignment: Assignment) =>
+    existing
+      ? client.updateAssignment(assignment)
+      : client.createAssignmentForCourse(courseId, assignment);
   return (
     <AssignmentEditorScreen
-      a={
-        assignments.find(({ _id }) => _id === (aid as string)) ??
-        templateAssignment
-      }
-      aid={aid as string}
-      cid={cid as string}
-      updateAssignmentAction={updateAssignment}
+      a={existing ?? templateAssignment}
+      aid={assignmentId}
+      cid={courseId}
+      updateAssignmentAction={save}
     />
   );
 }

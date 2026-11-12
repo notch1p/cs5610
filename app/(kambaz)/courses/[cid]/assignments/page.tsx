@@ -1,16 +1,23 @@
 "use client";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import AssignmentItem from "./AssignmentItem";
-import { useAssignmentsStore } from "@/app/(kambaz)/store/assignmentsStore";
+import type { Assignment } from "@/app/(kambaz)/store/assignmentsStore";
+import * as client from "./client";
 import { redirect, useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const { assignments: afull, deleteAssignment } = useAssignmentsStore();
-  const assignments = afull.filter(({ course }) => course === (cid as string));
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [show, setShow] = useState(false);
   const [deleting, setDeleting] = useState("");
+  useEffect(() => {
+    client.findAssignmentsForCourse(cid as string).then(setAssignments);
+  }, [cid]);
+  const deleteAssignment = async (assignmentId: string) => {
+    await client.deleteAssignment(assignmentId);
+    setAssignments((list) => list.filter((a) => a._id !== assignmentId));
+  };
 
   return (
     <div id="wd-assignments">

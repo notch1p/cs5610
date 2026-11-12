@@ -16,7 +16,7 @@ textarea[id="wd-description"]
                                 button[Cancel] button[Save] (submit type)
 */
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Assignment,
   NoIdAssignment,
@@ -32,9 +32,10 @@ export default function AssignmentEditorScreen({
   a: NoIdAssignment;
   aid: string;
   cid: string;
-  updateAssignmentAction: (a: Assignment) => void;
+  updateAssignmentAction: (a: Assignment) => Promise<unknown>;
 }) {
   const [assignment, setAssignment] = useState(a);
+  const router = useRouter();
   return (
     <div id="wd-assignments-editor" className="space-y-6">
       <div>
@@ -268,10 +269,10 @@ export default function AssignmentEditorScreen({
         <button
           id="wd-save"
           className="reset-default rounded border border-red-700 bg-red-700 shadow-sm px-3 py-1.5 text-sm font-medium text-white no-underline"
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
-            updateAssignment({ ...assignment, _id: aid, course: cid });
-            redirect(`/courses/${cid}/assignments`);
+            await updateAssignment({ ...assignment, _id: aid, course: cid });
+            router.push(`/courses/${cid}/assignments`);
           }}
         >
           Save
