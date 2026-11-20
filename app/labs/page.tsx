@@ -32,6 +32,22 @@ export default function Home() {
             GitHub Repo
           </Link>
         </li>
+        <li>
+          <Link
+            href="https://github.com/notch1p/cs5610-server"
+            id="wd-webdev-server"
+          >
+            webdev-server
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="https://cs5610-server-qdhu.onrender.com"
+            id="wd-webdev-server-deployed"
+          >
+            webdev-server deployed on Render
+          </Link>
+        </li>
       </ul>
     </div>
   );

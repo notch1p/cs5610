@@ -47,3 +47,7 @@ export const calculate = async (a: number, b: number, op: string) => {
   const response = await axios.get(CALC_API(a, b, op));
   return response.data;
 };
+export const fetchHello = async () => {
+  const response = await axios.get("/api/lab5/hello");
+  return response.data;
+};
