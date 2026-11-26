@@ -17,8 +17,9 @@ export default function CourseCard({
   name: string;
   description: string;
   image: string;
-  onEditAction: () => void;
-  onDeleteAction: () => void;
+  // Each action's button only shows when its handler is passed.
+  onEditAction?: () => void;
+  onDeleteAction?: () => void;
   onEnrollAction?: () => void;
   onUnenrollAction?: () => void;
 }) {
@@ -48,28 +49,32 @@ export default function CourseCard({
           >
             Go
           </button>
-          <button
-            type="button"
-            id="wd-edit-course-click"
-            className="ms-2 inline-flex items-center justify-center rounded bg-yellow-400 px-3 py-1.5 text-sm font-medium"
-            onClick={(event) => {
-              event.preventDefault();
-              onEdit();
-            }}
-          >
-            Edit
-          </button>
-          <button
-            type="button"
-            id="wd-delete-course-click"
-            className="ms-2 inline-flex items-center justify-center rounded bg-red-700 px-3 py-1.5 text-sm font-medium text-white"
-            onClick={(event) => {
-              event.preventDefault();
-              onDelete();
-            }}
-          >
-            Delete
-          </button>
+          {onEdit && (
+            <button
+              type="button"
+              id="wd-edit-course-click"
+              className="ms-2 inline-flex items-center justify-center rounded bg-yellow-400 px-3 py-1.5 text-sm font-medium"
+              onClick={(event) => {
+                event.preventDefault();
+                onEdit();
+              }}
+            >
+              Edit
+            </button>
+          )}
+          {onDelete && (
+            <button
+              type="button"
+              id="wd-delete-course-click"
+              className="ms-2 inline-flex items-center justify-center rounded bg-red-700 px-3 py-1.5 text-sm font-medium text-white"
+              onClick={(event) => {
+                event.preventDefault();
+                onDelete();
+              }}
+            >
+              Delete
+            </button>
+          )}
           {onEnroll && (
             <button
               type="button"

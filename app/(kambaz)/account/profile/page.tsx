@@ -24,6 +24,8 @@ export default function Profile() {
       router.push("/account/signin");
       return;
     }
+    // currentUser never has `password` (the server doesn't send it), and new
+    // sign-ups have no names or email yet, so the inputs fall back to "".
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setProfile(currentUser);
   }, [currentUser, router]);
@@ -48,26 +50,26 @@ export default function Profile() {
       />
       <br />
       <input
-        value={profile.password}
+        value={profile.password ?? ""}
         onChange={(e) => setProfile({ ...profile, password: e.target.value })}
         type="password"
         id="wd-password"
         className="mb-2 w-full rounded border border-neutral-300 px-3 py-2"
       />
       <input
-        value={profile.firstName}
+        value={profile.firstName ?? ""}
         onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
         id="wd-firstname"
         className="mb-2 w-full rounded border border-neutral-300 px-3 py-2"
       />
       <input
-        value={profile.lastName}
+        value={profile.lastName ?? ""}
         onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
         id="wd-lastname"
         className="mb-2 w-full rounded border border-neutral-300 px-3 py-2"
       />
       <input
-        value={profile.email}
+        value={profile.email ?? ""}
         onChange={(e) => setProfile({ ...profile, email: e.target.value })}
         type="email"
         id="wd-email"

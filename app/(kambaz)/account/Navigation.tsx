@@ -4,11 +4,21 @@ import "@/app/labs/lab2/tailwind/utilities.css";
 import "../kambaz.css";
 import { useAccountContext } from "./AccountContext";
 import { usePathname } from "next/navigation";
+
+const labels = {
+  signin: "Signin",
+  signup: "Signup",
+  profile: "Profile",
+  users: "Users",
+};
+
 export default function AccountNavigation() {
   const { currentUser } = useAccountContext();
-  const links = currentUser
-    ? (["profile"] as const)
-    : (["signin", "signup"] as const);
+  const links: (keyof typeof labels)[] = !currentUser
+    ? ["signin", "signup"]
+    : currentUser.role === "ADMIN"
+      ? ["profile", "users"]
+      : ["profile"];
   const pathname = usePathname() ?? "";
 
   return (
@@ -28,11 +38,7 @@ export default function AccountNavigation() {
         return (
           <span key={link} className={spanstyle}>
             <Link href={href} className={linkstyle}>
-              {link === "signin"
-                ? "Signin"
-                : link === "signup"
-                  ? "Signup"
-                  : "Profile"}
+              {labels[link]}
             </Link>
             <br />
           </span>

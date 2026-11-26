@@ -5,6 +5,15 @@ import usersJson from "../database/users.json";
 
 export type User = (typeof usersJson)[number];
 
+// Keys match the role enum in the server's user schema.
+export const roles = {
+  STUDENT: "Student",
+  TA: "Assistant",
+  FACULTY: "Faculty",
+  ADMIN: "Administrator",
+  USER: "User",
+};
+
 type AccountContextValue = {
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;

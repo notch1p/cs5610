@@ -43,3 +43,21 @@
   border-left: 3px solid black !important;
   font-weight: 600;
 }
+/* "Frozen" quiz fields: read-only, hatched so they don't look editable.
+   Checkboxes and radios are left alone; the forms plugin draws their marks
+   with background images. */
+.wd-frozen
+  :is(input:not([type="checkbox"], [type="radio"]), select, textarea):disabled,
+.wd-frozen .wd-frozen-box {
+  background-image: repeating-linear-gradient(
+    135deg,
+    #f8f8f8 0 6px,
+    #ececec 6px 12px
+  );
+  color: #404040;
+  cursor: not-allowed;
+}
+/* Room to write in the quiz editor's WYSIWYG fields. */
+.wd-rich-text .ql-editor {
+  min-height: 8rem;
+}

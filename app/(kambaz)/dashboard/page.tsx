@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CourseCard from "./CourseCard";
+import CourseEditor from "./CourseEditor";
 import { emptyCourse, type Course } from "../store/coursesStore";
 import { useAccountContext } from "../account/AccountContext";
 import * as client from "../courses/client";
@@ -9,9 +10,17 @@ import * as client from "../courses/client";
 export default function Dashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [enrolledIds, setEnrolledIds] = useState<string[]>([]);
-  const [course, setCourse] = useState<Course>(emptyCourse);
+  // What the editor popup shows; null while it's closed.
+  const [editor, setEditor] = useState<{
+    course: Course;
+    isNew: boolean;
+  } | null>(null);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const { currentUser } = useAccountContext();
+  const isAdmin = currentUser?.role === "ADMIN";
+  // For faculty, enrollments are the courses they're in charge of: they see
+  // and edit only those, and don't enroll or unenroll themselves.
+  const isFaculty = currentUser?.role === "FACULTY";
   useEffect(() => {
     client.fetchAllCourses().then(setCourses);
     if (currentUser) {
@@ -20,13 +29,13 @@ export default function Dashboard() {
       });
     }
   }, [currentUser]);
-  const addCourse = async () => {
+  const addCourse = async (course: Course) => {
     const newCourse: Course = await client.createCourse(course);
     setCourses((cs) => [...cs, newCourse]);
     // createCourse also enrolls you on the server
     setEnrolledIds((ids) => [...ids, newCourse._id]);
   };
-  const updateCourse = async () => {
+  const updateCourse = async (course: Course) => {
     const updated: Course = await client.updateCourse(course);
     setCourses((cs) => cs.map((c) => (c._id === updated._id ? updated : c)));
   };
@@ -42,59 +51,14 @@ export default function Dashboard() {
     await client.unenrollFromCourse(courseId);
     setEnrolledIds((ids) => ids.filter((id) => id !== courseId));
   };
-  const showEnrolledOnly = currentUser !== null && !showAllCourses;
+  const showEnrolledOnly =
+    currentUser !== null && (isFaculty || !showAllCourses);
   const visibleCourses = showEnrolledOnly
     ? courses.filter((c) => enrolledIds.includes(c._id))
     : courses;
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
-      <hr />
-      <h5 className="flex flex-wrap items-center gap-2">
-        New Course
-        <button
-          type="button"
-          className="rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white"
-          id="wd-add-new-course-click"
-          onClick={addCourse}
-        >
-          Add
-        </button>
-        <button
-          type="button"
-          className="rounded bg-yellow-400 px-3 py-1.5 text-sm font-medium"
-          id="wd-update-course-click"
-          onClick={updateCourse}
-        >
-          Update
-        </button>
-      </h5>
-      <input
-        className="mb-2 mt-2 block w-full max-w-xl rounded border border-neutral-300 px-3 py-1.5"
-        value={course.name}
-        onChange={(e) => setCourse({ ...course, name: e.target.value })}
-        id="wd-course-name"
-      />
-      <input
-        className="mb-2 w-full mt-2 block max-w-xl rounded border border-neutral-300 px-3 py-1.5"
-        value={course.number}
-        onChange={(e) => setCourse({ ...course, number: e.target.value })}
-        id="wd-course-number"
-      />
-      <input
-        type="date"
-        className="mb-2 mt-2 w-full block max-w-xl rounded border border-neutral-300 px-3 py-1.5"
-        value={course.startDate}
-        onChange={(e) => setCourse({ ...course, startDate: e.target.value })}
-        id="wd-course-start-date"
-      />
-      <textarea
-        className="mb-3 block w-full max-w-xl rounded border border-neutral-300 px-3 py-1.5"
-        rows={3}
-        value={course.description}
-        onChange={(e) => setCourse({ ...course, description: e.target.value })}
-        id="wd-course-description"
-      />
       <hr />
       <h2
         id="wd-dashboard-published"
@@ -106,17 +70,37 @@ export default function Dashboard() {
             : "Published"}{" "}
           Courses ({visibleCourses.length})
         </span>
-        {currentUser && (
-          <button
-            type="button"
-            className="rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white"
-            id="wd-enrollments-toggle"
-            onClick={() => setShowAllCourses(!showAllCourses)}
-          >
-            Enrollments
-          </button>
-        )}
+        <span className="flex gap-2">
+          {currentUser && !isFaculty && (
+            <button
+              type="button"
+              className="rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white"
+              id="wd-enrollments-toggle"
+              onClick={() => setShowAllCourses(!showAllCourses)}
+            >
+              Enrollments
+            </button>
+          )}
+          {(isAdmin || isFaculty) && (
+            <button
+              type="button"
+              className="rounded bg-red-700 px-3 py-1.5 text-sm font-medium text-white"
+              id="wd-add-new-course-click"
+              onClick={() => setEditor({ course: emptyCourse, isNew: true })}
+            >
+              Add
+            </button>
+          )}
+        </span>
       </h2>
+      {editor && (
+        <CourseEditor
+          dialogTitle={editor.isNew ? "Add Course" : "Edit Course"}
+          course={editor.course}
+          saveCourseAction={editor.isNew ? addCourse : updateCourse}
+          handleCloseAction={() => setEditor(null)}
+        />
+      )}
       <hr />
       <div
         id="wd-dashboard-courses"
@@ -124,16 +108,25 @@ export default function Dashboard() {
       >
         {visibleCourses.map((c) => {
           const enrolled = enrolledIds.includes(c._id);
+          const canEdit = isAdmin || (isFaculty && enrolled);
           return (
             <CourseCard
               key={c._id}
               {...c}
-              onEditAction={() => setCourse(c)}
-              onDeleteAction={() => deleteCourse(c._id)}
-              onEnrollAction={
-                currentUser && !enrolled ? () => enroll(c._id) : undefined
+              onEditAction={
+                canEdit
+                  ? () => setEditor({ course: c, isNew: false })
+                  : undefined
               }
-              onUnenrollAction={enrolled ? () => unenroll(c._id) : undefined}
+              onDeleteAction={canEdit ? () => deleteCourse(c._id) : undefined}
+              onEnrollAction={
+                currentUser && !isFaculty && !enrolled
+                  ? () => enroll(c._id)
+                  : undefined
+              }
+              onUnenrollAction={
+                enrolled && !isFaculty ? () => unenroll(c._id) : undefined
+              }
             />
           );
         })}
